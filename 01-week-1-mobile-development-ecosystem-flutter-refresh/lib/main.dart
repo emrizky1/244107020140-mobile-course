@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
             SizedBox(height: 16),
             Text('Muhammad Rizki', style: TextStyle(fontSize: 24)),
             Text('Mobile Programming - Week 1'),
+            Text('NIM - 244107020140'),
           ]),
         ),
       ),

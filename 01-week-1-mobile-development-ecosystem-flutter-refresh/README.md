@@ -1,17 +1,11 @@
-# my_first_app
+# Mini Assignment
+[!SS](screenshots/Screenshot_2026-08-30-19-52-30-663_com.example.my_first_app.jpg)
+One setup problem that I encountered was android-licenses problem, whenever I try to set the android license it always show an error. The solution is to downgrade the command-line tool version from latest (23) to 22.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Reflection
+1. When is native development more appropriate than cross-platform development?
+- If we are targeting a single platform, hardware intensive, and if the app depend on platform-specific features or frequent OS updates
+2. How does a state change relate to the widget tree and declarative UI?
+- If the state changes, the UI description changes, and Flutter updates the screen accordingly.
+3. Why are small commits with clear messages useful for teamwork and a portfolio?
+- Because other team member can easily understand whhat change / update that happened. For portofolio, it makes our portofolio seems professional.~

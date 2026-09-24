@@ -127,3 +127,6 @@ Jelaskan setiap bagian kode dalam komentar.
   - *Discovery*: The initial AI implementation always initiated a duplicate network request whenever navigating to the post detail screen.
   - *Modification*: Utilized `ref.read(postListProvider)` within `postDetailProvider`. If the selected post is already present in the pre-loaded list state, it is returned immediately from memory. A network call is only executed if the post detail is opened directly via a deep link or browser refresh.
   - *Rationale*: Significantly improves user experience and perceived performance by rendering the detail screen instantaneously without loading delays.
+
+---
+

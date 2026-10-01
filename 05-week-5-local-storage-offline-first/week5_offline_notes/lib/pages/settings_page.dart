@@ -6,6 +6,9 @@ import '../providers/providers.dart';
 
 final prefsRepositoryProvider = Provider((ref) => PrefsRepository());
 final darkModeProvider = AsyncNotifierProvider<DarkModeNotifier, bool>(DarkModeNotifier.new);
+final lastOpenedProvider = FutureProvider<String?>((ref) {
+  return ref.watch(prefsRepositoryProvider).getLastOpened();
+});
 
 class DarkModeNotifier extends AsyncNotifier<bool> {
   @override
@@ -52,6 +55,14 @@ class SettingsPageBody extends ConsumerWidget {
             value: isOffline,
             onChanged: (v) =>
                 ref.read(forceOfflineProvider.notifier).toggle(v),
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text('Last Opened'),
+            subtitle: Text(
+              ref.watch(lastOpenedProvider).value ?? 'Not recorded yet',
+            ),
+            leading: const Icon(Icons.history),
           ),
         ],
       ),

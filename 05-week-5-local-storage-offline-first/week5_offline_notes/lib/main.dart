@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'data/prefs.dart';
 import 'pages/note_detail_page.dart';
 import 'pages/notes_page.dart';
 import 'pages/post_list_page.dart';
 import 'pages/settings_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PrefsRepository().markOpenedNow();
   runApp(const ProviderScope(child: MyApp()));
 }
 

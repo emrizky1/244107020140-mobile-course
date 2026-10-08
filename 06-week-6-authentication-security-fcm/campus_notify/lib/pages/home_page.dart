@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../messaging/push_service.dart';
 import '../providers/auth_provider.dart';
+import '../routes.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -78,7 +79,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
+              color: color.withValues(alpha: 0.12),
               border: Border.all(color: color, width: 2),
               borderRadius: BorderRadius.circular(12),
             ),
@@ -138,7 +139,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           const SizedBox(height: 24),
 
           OutlinedButton(
-            onPressed: () => context.push('/announcement/3'),
+            onPressed: () => context.push(Routes.announcement('3')),
             child: const Text('Open /announcement/3 (manual test)'),
           ),
         ],

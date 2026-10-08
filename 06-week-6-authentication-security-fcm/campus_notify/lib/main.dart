@@ -9,28 +9,29 @@ import 'pages/login_page.dart';
 import 'pages/home_page.dart';
 import 'pages/announcement_page.dart';
 import 'messaging/push_service.dart';
+import 'routes.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // Memicu redirect ulang saat status login berubah.
   final refresh = ValueNotifier<int>(0);
-  ref.listen(authStateProvider, (_, __) => refresh.value++);
+  ref.listen(authStateProvider, (_, _) => refresh.value++);
   ref.onDispose(refresh.dispose);
 
   return GoRouter(
     refreshListenable: refresh,
     redirect: (context, state) {
       final loggedIn = ref.read(authStateProvider).value ?? false;
-      final goingLogin = state.matchedLocation == '/login';
+      final goingLogin = state.matchedLocation == Routes.login;
 
-      if (!loggedIn && !goingLogin) return '/login';
-      if (loggedIn && goingLogin) return '/';
+      if (!loggedIn && !goingLogin) return Routes.login;
+      if (loggedIn && goingLogin) return Routes.home;
       return null;
     },
     routes: [
-      GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
-      GoRoute(path: '/', builder: (_, __) => const HomePage()),
+      GoRoute(path: Routes.login, builder: (_, _) => const LoginPage()),
+      GoRoute(path: Routes.home, builder: (_, _) => const HomePage()),
       GoRoute(
-        path: '/announcement/:id',
+        path: Routes.announcementById,
         builder: (_, state) =>
             AnnouncementPage(id: state.pathParameters['id'] ?? ''),
       ),

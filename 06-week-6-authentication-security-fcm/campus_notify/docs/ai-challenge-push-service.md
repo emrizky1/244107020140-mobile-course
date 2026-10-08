@@ -22,16 +22,16 @@ and which parts must never touch BuildContext.
 
 The AI generated `lib/messaging/push_service.dart` with the following structure:
 
-- ✅ Top-level `firebaseMessagingBackgroundHandler` with `@pragma('vm:entry-point')`
-- ✅ `registerBackgroundHandler()` — calls `FirebaseMessaging.onBackgroundMessage`
-- ✅ `listenForeground(go)` — `onMessage` + `onMessageOpenedApp`
-- ✅ `handleTerminated(go)` — `getInitialMessage` + `pendingDeepLink`
-- ✅ `requestNotificationPermission()` — asks for alert/badge/sound
-- ✅ `initLocalNotifications(onTap:)` — sets up `FlutterLocalNotificationsPlugin`
-- ✅ `initFcmToken(onToken:)` — `getToken` + `onTokenRefresh` + topic auto-subscribe
-- ✅ `setTopicSubscribed(bool)` / `isTopicSubscribed()`
-- ❌ `onTokenRefresh` callback only called `debugPrint` — did NOT post to backend
-- ❌ Foreground `show()` lacked iOS `DarwinNotificationDetails`
+- Top-level `firebaseMessagingBackgroundHandler` with `@pragma('vm:entry-point')`
+- `registerBackgroundHandler()` — calls `FirebaseMessaging.onBackgroundMessage`
+- `listenForeground(go)` — `onMessage` + `onMessageOpenedApp`
+- `handleTerminated(go)` — `getInitialMessage` + `pendingDeepLink`
+- `requestNotificationPermission()` — asks for alert/badge/sound
+- `initLocalNotifications(onTap:)` — sets up `FlutterLocalNotificationsPlugin`
+- `initFcmToken(onToken:)` — `getToken` + `onTokenRefresh` + topic auto-subscribe
+- `setTopicSubscribed(bool)` / `isTopicSubscribed()`
+- `onTokenRefresh` callback only called `debugPrint` — did NOT post to backend
+- Foreground `show()` lacked iOS `DarwinNotificationDetails`
 
 ---
 
@@ -108,9 +108,9 @@ curl -X POST https://fcm.googleapis.com/fcm/send \
 ## 7. What Must Never Touch `BuildContext`
 
 The **background message handler** (`firebaseMessagingBackgroundHandler`) runs in a separate Dart isolate on Android. It has:
-- ❌ No access to `BuildContext`
-- ❌ No access to Riverpod providers
-- ❌ No access to `Navigator` or `GoRouter`
-- ✅ Can do lightweight work: logging, writing to shared prefs, database inserts
+- No access to `BuildContext`
+- No access to Riverpod providers
+- No access to `Navigator` or `GoRouter`
+- Can do lightweight work: logging, writing to shared prefs, database inserts
 
 Navigation from a background notification happens only when the user **taps** it, which triggers `onMessageOpenedApp` in the main isolate where `BuildContext` is available.

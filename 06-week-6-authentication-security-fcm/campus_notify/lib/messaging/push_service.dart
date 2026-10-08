@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../routes.dart';
+
 // ---------------------------------------------------------------------------
 // Background handler — MUST be a top-level function (not a class method).
 // ---------------------------------------------------------------------------
@@ -24,11 +26,18 @@ void registerBackgroundHandler() {
 // Foreground listener + background-tapped handler
 // ---------------------------------------------------------------------------
 
+/// Extracts the navigation route from an FCM data payload.
+///
+/// Pure function — no Firebase dependency, unit-testable.
+/// Falls back to [Routes.home] when the payload has no `route` key.
+String routeFromMessage(Map<String, dynamic> data) =>
+    (data['route'] as String?) ?? Routes.home;
+
 void listenForeground(void Function(String route) go) {
   // Foreground: the system shows NO banner automatically,
   // so display one manually via a local notification.
   FirebaseMessaging.onMessage.listen((message) async {
-    final route = message.data['route'] ?? '/';
+    final route = routeFromMessage(message.data);
 
     // Android 13+ needs a notification channel; iOS needs presentation options.
     const androidDetails = AndroidNotificationDetails(
@@ -58,7 +67,7 @@ void listenForeground(void Function(String route) go) {
 
   // Background -> tapped.
   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    go(message.data['route'] ?? '/');
+    go(routeFromMessage(message.data));
   });
 }
 
@@ -69,7 +78,7 @@ void listenForeground(void Function(String route) go) {
 Future<void> handleTerminated(void Function(String route) go) async {
   final initial = await FirebaseMessaging.instance.getInitialMessage();
   if (initial != null) {
-    go(initial.data['route'] ?? '/');
+    go(routeFromMessage(initial.data));
   }
   if (pendingDeepLink != null) {
     go(pendingDeepLink!);

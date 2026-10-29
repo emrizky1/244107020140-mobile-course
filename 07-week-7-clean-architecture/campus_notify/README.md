@@ -30,6 +30,25 @@ In mobile client engineering, handling authentication securely and delivering re
 - Inconsistent routing upon tapping notifications across different app lifecycle states.
 - Exposing raw network/server exceptions directly to end users.
 
+### Mid-semester readiness (October 29, 2026)
+
+The project is in feature-first structure, with presentation, domain, and data responsibilities separated. The Week 7 boundary searches found no infrastructure imports in presentation pages, no Flutter or infrastructure imports in domain, and no repository implementation construction in presentation pages.
+
+| Check | Result |
+|---|---|
+| `flutter analyze` | Pass — no issues found |
+| `dart format --set-exit-if-changed .` | Pass — 32 files checked, 0 changed |
+| `flutter test` | Pass — all 14 tests passed |
+| PR automation | Added in [`../../../.github/workflows/ci.yml`](../../../.github/workflows/ci.yml); will run on the next PR update |
+
+Issue and PR map:
+
+| Issue | Pull request | Status |
+|---|---|---|
+| [#12 — reject blank note titles](https://github.com/emrizky1/244107020140-mobile-course/issues/12) | [#1 — validate blank note titles and add a test](https://github.com/emrizky1/244107020140-mobile-course/pull/1) | Open; not merged |
+
+Peer feedback recommends adding widget coverage for whitespace-only and valid titles. That feedback is still pending, and this PR has not yet completed the review and merge step. Current screenshots and the run guide are listed below; before-refactor screenshot evidence is unavailable.
+
 ---
 
 ## Tech Stack
@@ -109,16 +128,16 @@ Open **Notes** from the home screen to add and view saved notes. The local SQLit
 - Presentation raw-data search: **zero hits** for Dio, database opening, secure storage, shared preferences, or direct Firebase calls.
 - Domain framework/package search: **zero hits** for Flutter, Dio, sqflite, Firebase, or secure-storage imports.
 - `flutter analyze`: **No issues found**.
-- `flutter test`: **All tests passed** (13 total, including route/date formatting, API/auth failure mapping, Notes state, and widget tests).
+- `flutter test`: **All tests passed** (14 total, including route/date formatting, API/auth failure mapping, Notes state, and widget tests).
 
-Manual emulator interaction and new before/after screenshots are still pending: the Pixel 9 emulator did not appear as a connected device after launch, so I could not capture app screenshots in this environment.
+Before-refactor screenshots were not captured. Current screenshots are stored in `screenshots/after-notes.jpg`, `screenshots/after-announcements.jpg`, and `screenshots/after-auth.jpg`.
 
 ### Lab 4 — Refactoring and common errors
 
 - Auth also follows entity → domain repository contract → data implementation → Riverpod provider wiring. `Login` owns email/password validation; Notes stays direct repository-to-notifier because its current operations are simple local CRUD.
 - `lib/core/format.dart` contains pure `routeFromMessage` and `formatDateTime` functions. FCM routing and the Notes date label use these functions without adding a formatting package.
 - Repository and notifier boundaries turn raw storage, Firebase, auth, and Dio errors into typed `Failure` values with user-friendly messages. Pages render only `Failure.message` or a safe fallback.
-- `flutter analyze`: **No issues found**; `flutter test`: **All 13 tests passed**.
+- `flutter analyze`: **No issues found**; `flutter test`: **All 14 tests passed**.
 
 ### 1. Authentication & Route Guard
 - Managed by `authStateProvider` (`AsyncNotifier<bool>`).
@@ -174,7 +193,7 @@ flutter run
 ```bash
 flutter test
 ```
-All 13 unit and widget tests pass, covering route/date formatting, API/auth failure mapping, Notes state/repository behavior, and UI rendering.
+All 14 unit and widget tests pass, covering route/date formatting, API/auth failure mapping, Notes state/repository behavior, and UI rendering.
 
 ### Static Analysis
 ```bash
@@ -208,9 +227,9 @@ Add your current app captures using these filenames. The original before-refacto
 
 | Feature | Screenshot file | What to capture |
 |---|---|---|
-| Notes | `screenshots/after-notes.png` | Notes list with representative saved notes |
-| Announcements | `screenshots/after-announcements.png` | Announcement list or detail screen |
-| Auth | `screenshots/after-auth.png` | Login/auth screen, if included in the refactor demo |
+| Notes | `screenshots/after-notes.jpg` | Notes list with representative saved notes |
+| Announcements | `screenshots/after-announcements.jpg` | Announcement list or detail screen |
+| Auth | `screenshots/after-auth.jpg` | Login/auth screen, if included in the refactor demo |
 
 **Before evidence:** unavailable; screenshots were not captured before the refactor. Compare the current UI against the original version in writing if you still have access to it.
 

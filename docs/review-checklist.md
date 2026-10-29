@@ -16,3 +16,18 @@
 | `remove google-services.json` | `chore(android): ignore Firebase configuration file` | Matches the actual change, which adds the config filename to `.gitignore` rather than deleting the file in this commit. |
 
 These are proposed rewrites for the lab only; historical commits were not rewritten.
+
+## Lab 3: mid-semester readiness
+
+| Check | Status | Evidence / follow-up |
+| --- | --- | --- |
+| Feature-first structure and Week 7 boundary searches | Pass | No hits for infrastructure imports in presentation pages, framework/infrastructure imports in domain, or repository implementation construction in presentation pages. |
+| `flutter analyze` | Pass | `No issues found!` |
+| `dart format --set-exit-if-changed .` | Pass | 32 app files checked; 0 changed. Generated, ignored `build/` output was temporarily moved out of the formatter's search. |
+| `flutter test` | Pass | All 14 tests passed. |
+| README, screenshots, and run guide | Pass with a note | The Week 7 README has run instructions and current screenshots. Before-refactor screenshots were not captured. |
+| Small PR and clear commits | In progress | PR #1 targets `develop`; commits use clear conventional messages. The PR remains open. |
+| Review comments addressed | Pending | The peer suggested adding whitespace-only and valid-title widget cases. These have not been addressed. |
+| Issue / PR map in README | Pass | Issue #12 is mapped to PR #1; the PR is open and has not merged. |
+
+The mid-semester definition of done is not yet met: the PR is open, review feedback remains pending, and the app has not been manually rechecked against its Week 7 behavior in this audit.

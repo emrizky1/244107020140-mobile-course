@@ -54,6 +54,13 @@ flutter test
 
 Pull requests also run these checks through [the CI workflow](../.github/workflows/ci.yml).
 
+## References
+
+- [Flutter app architecture guide](https://docs.flutter.dev/app-architecture/guide)
+- [Flutter testing overview](https://docs.flutter.dev/testing/overview)
+- [Dart formatter](https://dart.dev/tools/dart-format)
+- [Dart analyzer](https://dart.dev/tools/dart-analyze)
+
 ## PR description
 
 **Problem:** Users can submit a note with an empty or whitespace-only title, or receive no useful feedback when the title is invalid.

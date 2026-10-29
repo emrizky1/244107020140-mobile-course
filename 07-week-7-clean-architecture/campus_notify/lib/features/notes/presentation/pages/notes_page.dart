@@ -30,7 +30,12 @@ class _NotesPageState extends ConsumerState<NotesPage> {
 
   Future<void> _addNote() async {
     final title = _title.text.trim();
-    if (title.isEmpty) return;
+    if (title.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Title cannot be empty.')),
+      );
+      return;
+    }
     await ref
         .read(notesProvider.notifier)
         .add(title: title, body: _body.text.trim());

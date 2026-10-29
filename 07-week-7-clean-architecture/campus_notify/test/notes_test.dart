@@ -2,6 +2,8 @@ import 'package:campus_notify/core/failures.dart';
 import 'package:campus_notify/features/notes/domain/entities/note.dart';
 import 'package:campus_notify/features/notes/domain/repositories/note_repository.dart';
 import 'package:campus_notify/features/notes/presentation/providers/notes_providers.dart';
+import 'package:campus_notify/features/notes/presentation/pages/notes_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -31,6 +33,23 @@ class FakeNoteRepository implements NoteRepository {
 }
 
 void main() {
+  testWidgets('empty note title shows validation feedback', (tester) async {
+    final repository = FakeNoteRepository();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [noteRepositoryProvider.overrideWithValue(repository)],
+        child: const MaterialApp(home: NotesPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Add note'));
+    await tester.pump();
+
+    expect(find.text('Title cannot be empty.'), findsOneWidget);
+    expect(repository.notes, isEmpty);
+  });
+
   test(
     'notes state loads and adds notes through the repository contract',
     () async {

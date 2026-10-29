@@ -37,9 +37,9 @@ The project is in feature-first structure, with presentation, domain, and data r
 | Check | Result |
 |---|---|
 | `flutter analyze` | Pass — no issues found |
-| `dart format --set-exit-if-changed .` | Pass — 32 files checked, 0 changed |
-| `flutter test` | Pass — all 14 tests passed |
-| PR automation | Added in [`../../../.github/workflows/ci.yml`](../../../.github/workflows/ci.yml); will run on the next PR update |
+| `dart format --set-exit-if-changed .` | Pass — 33 files checked, 0 changed |
+| `flutter test` | Pass — all 17 tests passed |
+| PR automation | Added in [`../../../.github/workflows/ci.yml`](../../../.github/workflows/ci.yml); GitHub check status is not yet verified |
 
 Issue and PR map:
 
@@ -47,7 +47,7 @@ Issue and PR map:
 |---|---|---|
 | [#12 — reject blank note titles](https://github.com/emrizky1/244107020140-mobile-course/issues/12) | [#1 — validate blank note titles and add a test](https://github.com/emrizky1/244107020140-mobile-course/pull/1) | Open; not merged |
 
-Peer feedback recommends adding widget coverage for whitespace-only and valid titles. That feedback is still pending, and this PR has not yet completed the review and merge step. Current screenshots and the run guide are listed below; before-refactor screenshot evidence is unavailable.
+Peer feedback about whitespace-only titles, valid-title behavior, and validation-message reuse has been addressed in code and tests. Formal re-review and approval are still pending. The automated checks pass locally; the required manual test and screenshot for the validation flow are pending because the macOS build stalled while fetching Firebase packages. Current screenshots and the run guide are listed below; before-refactor screenshot evidence is unavailable.
 
 ---
 
@@ -128,7 +128,7 @@ Open **Notes** from the home screen to add and view saved notes. The local SQLit
 - Presentation raw-data search: **zero hits** for Dio, database opening, secure storage, shared preferences, or direct Firebase calls.
 - Domain framework/package search: **zero hits** for Flutter, Dio, sqflite, Firebase, or secure-storage imports.
 - `flutter analyze`: **No issues found**.
-- `flutter test`: **All tests passed** (14 total, including route/date formatting, API/auth failure mapping, Notes state, and widget tests).
+- `flutter test`: **All tests passed** (17 total, including route/date formatting, API/auth failure mapping, Notes state, and widget tests).
 
 Before-refactor screenshots were not captured. Current screenshots are stored in `screenshots/after-notes.jpg`, `screenshots/after-announcements.jpg`, and `screenshots/after-auth.jpg`.
 
@@ -137,7 +137,7 @@ Before-refactor screenshots were not captured. Current screenshots are stored in
 - Auth also follows entity → domain repository contract → data implementation → Riverpod provider wiring. `Login` owns email/password validation; Notes stays direct repository-to-notifier because its current operations are simple local CRUD.
 - `lib/core/format.dart` contains pure `routeFromMessage` and `formatDateTime` functions. FCM routing and the Notes date label use these functions without adding a formatting package.
 - Repository and notifier boundaries turn raw storage, Firebase, auth, and Dio errors into typed `Failure` values with user-friendly messages. Pages render only `Failure.message` or a safe fallback.
-- `flutter analyze`: **No issues found**; `flutter test`: **All 14 tests passed**.
+- `flutter analyze`: **No issues found**; `flutter test`: **All 17 tests passed**.
 
 ### 1. Authentication & Route Guard
 - Managed by `authStateProvider` (`AsyncNotifier<bool>`).
@@ -193,7 +193,7 @@ flutter run
 ```bash
 flutter test
 ```
-All 14 unit and widget tests pass, covering route/date formatting, API/auth failure mapping, Notes state/repository behavior, and UI rendering.
+All 17 unit and widget tests pass, covering route/date formatting, API/auth failure mapping, Notes state/repository behavior, blank and whitespace-only title validation, and successful note creation through the page.
 
 ### Static Analysis
 ```bash

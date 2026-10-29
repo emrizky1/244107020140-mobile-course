@@ -23,11 +23,12 @@ These are proposed rewrites for the lab only; historical commits were not rewrit
 | --- | --- | --- |
 | Feature-first structure and Week 7 boundary searches | Pass | No hits for infrastructure imports in presentation pages, framework/infrastructure imports in domain, or repository implementation construction in presentation pages. |
 | `flutter analyze` | Pass | `No issues found!` |
-| `dart format --set-exit-if-changed .` | Pass | 32 app files checked; 0 changed. Generated, ignored `build/` output was temporarily moved out of the formatter's search. |
-| `flutter test` | Pass | All 14 tests passed. |
+| `dart format --set-exit-if-changed .` | Pass | 33 app files checked; 0 changed. Generated, ignored `build/` output was temporarily moved out of the formatter's search. |
+| `flutter test` | Pass | All 17 tests passed, including empty, whitespace-only, valid trimmed title, and direct notifier validation cases. |
 | README, screenshots, and run guide | Pass with a note | The Week 7 README has run instructions and current screenshots. Before-refactor screenshots were not captured. |
-| Small PR and clear commits | In progress | PR #1 targets `develop`; commits use clear conventional messages. The PR remains open. |
-| Review comments addressed | Pending | The peer suggested adding whitespace-only and valid-title widget cases. These have not been addressed. |
+| Small PR and clear commits | Pass | PR #1 targets `develop`; current diff is under 300 lines and commits use clear conventional messages. |
+| Review feedback addressed | In progress | Whitespace-only and valid-title widget cases were added, and the shared domain validator prevents notifier bypass. Formal re-review and approval are still pending. |
+| Manual test and screenshot | Pending | The macOS launch stalled while fetching Firebase Swift packages; no manual validation screenshot was captured. |
 | Issue / PR map in README | Pass | Issue #12 is mapped to PR #1; the PR is open and has not merged. |
 
-The mid-semester definition of done is not yet met: the PR is open, review feedback remains pending, and the app has not been manually rechecked against its Week 7 behavior in this audit.
+The mid-semester definition of done is not yet met: the PR remains open, peer approval is pending, and the validation flow still needs a manual run and screenshot.

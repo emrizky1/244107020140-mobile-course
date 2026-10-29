@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/format.dart';
+import '../../domain/validation/note_title_validator.dart';
 import '../providers/notes_providers.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
@@ -30,10 +31,10 @@ class _NotesPageState extends ConsumerState<NotesPage> {
 
   Future<void> _addNote() async {
     final title = _title.text.trim();
-    if (title.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Title cannot be empty.')));
+    final validationFailure = validateNoteTitle(title);
+    if (validationFailure != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(validationFailure.message)));
       return;
     }
     await ref

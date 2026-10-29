@@ -19,3 +19,7 @@ final class AuthFailure extends Failure {
 final class NotificationFailure extends Failure {
   const NotificationFailure(super.message);
 }
+
+final class ValidationFailure extends Failure {
+  const ValidationFailure(super.message);
+}

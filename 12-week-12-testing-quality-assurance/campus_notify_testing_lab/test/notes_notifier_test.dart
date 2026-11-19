@@ -112,6 +112,23 @@ void main() {
       expect(container.read(notesProvider).failure, isNull);
       expect(repository.fetchCalls, 2);
     });
+
+    test('a note added while loading is kept when the load finishes', () async {
+      final repository = FakeNoteRepository()
+        ..fetchGate = Completer<void>()
+        ..staleFetchResult = const [];
+      final container = _containerWith(repository);
+      final notifier = container.read(notesProvider.notifier);
+
+      final loading = notifier.load();
+      await notifier.add(title: 'Added during load');
+      repository.fetchGate!.complete();
+      await loading;
+
+      expect(container.read(notesProvider).notes.map((note) => note.title), [
+        'Added during load',
+      ]);
+    });
   });
 
   group('NoteRepositoryImpl when the database cannot be opened', () {

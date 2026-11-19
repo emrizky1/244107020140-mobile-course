@@ -33,9 +33,33 @@ body and search fields and the add button in `notes_page.dart`, and `integration
  
 | Command | Result |
 |---------|--------|
-| `flutter test` | All 26 tests passed |
+| `flutter test` | All 28 tests passed |
+| `flutter test --coverage` | All 28 tests passed; coverage generated in `coverage/lcov.info` |
 | `flutter test integration_test/app_test.dart -d 5PBE6DGQDYTCBULB` | Passed on a physical Android device (24095PCADG, Android 16) |
 | `flutter analyze` | No issues found |
+
+
+### Code coverage
+
+Coverage was generated with `flutter test --coverage` (28 tests passed).
+
+| File | Covered lines | Coverage |
+|------|---------------|----------|
+| `lib/core/failures.dart` | 2/5 | 40.0% |
+| `lib/features/notes/data/repositories/note_repository_impl.dart` | 5/12 | 41.7% |
+| `lib/core/format.dart` | 6/10 | 60.0% |
+| `lib/features/notes/presentation/providers/notes_providers.dart` | 50/51 | 98.0% |
+| `lib/features/notes/domain/entities/note.dart` | 1/1 | 100.0% |
+| `lib/features/notes/data/models/note_model.dart` | 20/20 | 100.0% |
+| `lib/features/notes/domain/usecases/add_note.dart` | 3/3 | 100.0% |
+| `lib/features/notes/domain/usecases/fetch_notes.dart` | 3/3 | 100.0% |
+| `lib/features/notes/domain/usecases/filter_notes.dart` | 8/8 | 100.0% |
+| `lib/features/notes/presentation/pages/notes_page.dart` | 93/93 | 100.0% |
+
+The remaining uncovered provider line is the intentional `StateError` guard in
+`noteRepositoryProvider`, which requires the repository to be overridden in the app composition
+root. The repository tests currently cover database-opening failures; successful database
+query and insert paths are not yet covered.
 
 ### Evidence
 
@@ -61,7 +85,7 @@ body and search fields and the add button in `notes_page.dart`, and `integration
 - The integration test builds `NotesPage` directly with an in-memory database instead of starting the
   whole app through `main()`, because `main()` also initializes Firebase and asks for notification
   permission. Login, push notifications and the AI chat are therefore not covered by it.
-- Code coverage (`flutter test --coverage`) was not measured.
+- Code coverage was measured with `flutter test --coverage`. The Notes page, domain use cases, model mapping and entity have full coverage. The repository and core utility files still have untested lines.
 ## Reflection
  
 **Which bug would have been easiest to miss without the tests you wrote?**

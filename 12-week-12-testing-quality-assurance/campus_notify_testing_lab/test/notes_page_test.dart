@@ -12,6 +12,7 @@ import 'helpers/fake_note_repository.dart';
 
 const _titleField = Key('note-title-field');
 const _bodyField = Key('note-body-field');
+const _searchField = Key('note-search-field');
 const _addButton = Key('add-note-button');
 
 Future<void> _pumpNotesPage(
@@ -173,6 +174,51 @@ void main() {
         isNotNull,
       );
       expect(find.text('Slow save'), findsOneWidget);
+    });
+  });
+
+  group('search and retry', () {
+    testWidgets('typing in the search field filters the visible notes', (
+      tester,
+    ) async {
+      final repository = FakeNoteRepository(
+        initialNotes: [
+          Note(
+            id: 2,
+            title: 'Read the material',
+            updatedAt: DateTime(2026, 11, 19, 8, 30),
+          ),
+          Note(
+            id: 1,
+            title: 'Submit the lab',
+            updatedAt: DateTime(2026, 11, 18, 21, 5),
+          ),
+        ],
+      );
+      await _pumpNotesPage(tester, repository);
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(_searchField), 'LAB');
+      await tester.pump();
+
+      expect(find.text('Submit the lab'), findsOneWidget);
+      expect(find.text('Read the material'), findsNothing);
+    });
+
+    testWidgets('retry reloads the notes after a load failure', (tester) async {
+      final repository = FakeNoteRepository()
+        ..fetchFailure = const LocalFailure('Catatan gagal dimuat.');
+      await _pumpNotesPage(tester, repository);
+      await tester.pumpAndSettle();
+      expect(find.text('Catatan gagal dimuat.'), findsOneWidget);
+
+      repository.fetchFailure = null;
+      await tester.tap(find.text('Coba lagi'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Catatan gagal dimuat.'), findsNothing);
+      expect(find.text('Belum ada catatan.'), findsOneWidget);
+      expect(repository.fetchCalls, 2);
     });
   });
 }

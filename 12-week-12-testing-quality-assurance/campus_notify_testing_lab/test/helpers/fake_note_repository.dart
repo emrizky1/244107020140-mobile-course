@@ -9,6 +9,8 @@ import 'package:campus_notify/features/notes/domain/repositories/note_repository
 /// * Set [fetchFailure] / [addFailure] to simulate errors.
 /// * Set [fetchGate] / [addGate] to hold a call open until the test completes
 ///   the gate, which makes "loading" and "saving" states observable.
+/// * Set [staleFetchResult] to make a slow fetch return an old snapshot,
+///   ignoring notes added while it was waiting.
 /// * [fetchCalls] / [addCalls] record how often the app reached the data layer.
 class FakeNoteRepository implements NoteRepository {
   FakeNoteRepository({List<Note> initialNotes = const []})
@@ -20,6 +22,7 @@ class FakeNoteRepository implements NoteRepository {
   Failure? addFailure;
   Completer<void>? fetchGate;
   Completer<void>? addGate;
+  List<Note>? staleFetchResult;
 
   int fetchCalls = 0;
   int addCalls = 0;
@@ -28,7 +31,10 @@ class FakeNoteRepository implements NoteRepository {
   Future<({List<Note> notes, Failure? failure})> fetchNotes() async {
     fetchCalls++;
     await fetchGate?.future;
-    return (notes: List<Note>.unmodifiable(notes), failure: fetchFailure);
+    return (
+      notes: List<Note>.unmodifiable(staleFetchResult ?? notes),
+      failure: fetchFailure,
+    );
   }
 
   @override

@@ -1,18 +1,48 @@
+# Campus Notify
+
+Campus Notify is a Flutter application for viewing campus announcements, saving notes, and chatting with an AI assistant.
+
+## CI/CD workflow
+
+The GitHub Actions workflow at `.github/workflows/flutter-ci.yml` runs on pushes and pull requests targeting `main`, and can also be started manually. It checks out the repository, installs Java 17 and stable Flutter, fetches dependencies, checks Dart formatting, runs static analysis and tests, and then builds Android release APK and app bundle files. Successful builds are uploaded as the `android-builds` artifact for seven days.
+
+The workflow only requests `contents: read`. It does not deploy to Google Play or expose signing secrets. Pull requests from forks do not receive repository secrets.
+
+## Versioning
+
+The current version in `pubspec.yaml` is `1.0.0+1`: app version `1.0.0`, build number `1`. The proposed next patch release is `1.0.1+2`. Increment the build number for every new upload, and tag a release commit (for example, `v1.0.1`) after its checks pass.
+
+## Lab verification record
+
+Local verification for the CI and artifact workflow changes:
+
+- Dart formatting check: passed, 46 source and test files checked with no changes required.
+- `flutter analyze --fatal-infos`: passed with no issues.
+- `flutter test --coverage`: passed, all 33 tests passed.
+- `flutter build apk --release`: passed; produced `build/app/outputs/flutter-apk/app-release.apk`.
+- `flutter build appbundle --release`: passed; produced `build/app/outputs/bundle/release/app-release.aab`.
+- Workflow changes are in commits `158a94b` (checks), `225b3d8` (Android artifacts), and `02e4869` (Flutter action configuration).
+
+These are local results. A GitHub Actions run and its downloadable artifact have not yet been observed because the commits have not been pushed.
 
 ## Reflection
 
-### 1. Which optimization had the biggest impact and why?
+### What problem was detected automatically before changes were merged?
 
-Lazy list rendering using `SliverList.builder` has the most direct potential impact, especially when handling a large number of notes. It builds list items on demand instead of constructing all note widgets at once, reducing unnecessary widget construction.
+The workflow checks catch Dart formatting drift, static analysis errors and infos, and failing unit or widget tests before a pull request can be merged. The current project passed those checks locally; a deliberately failing change has not been used to demonstrate a red GitHub Actions run.
 
-### 2. How did you verify that the optimizations actually work (not placebo)?
+### What information would help investigate a failed build?
 
-I used Flutter DevTools in Profile mode to inspect application performance and compare profiling sessions before and after optimization. I also ran `flutter analyze` and `flutter test` to verify code quality and functionality. All 33 tests passed, and static analysis reported no issues. However, exact before-and-after performance metrics were not consistently recorded, so a specific numerical performance improvement cannot be claimed.
+The failed workflow step and its complete log, the commit SHA and branch, the Flutter and Java versions, dependency resolution output, and the exact Gradle error would help reproduce and narrow down a failure. For artifact problems, confirm whether the APK and AAB files were created and whether the upload step found both paths.
 
-### 3. What trade-offs did you face?
+### What still needs approval or manual review before a release?
 
-The optimizations introduced some additional code organization and state-management considerations. Riverpod `select()` requires careful selection of state properties, while extracting `NoteCard` adds a separate component to maintain. Using `SliverList.builder` also requires a sliver-based layout structure. These trade-offs improve code organization and can reduce unnecessary work, but add some implementation complexity.
+Review the source changes and version, verify app configuration and permissions, test the signed build on supported devices, and obtain the release approval required by the project. Production signing material must be kept in restricted GitHub Actions secrets and only exposed to a protected release workflow. The current Android release build uses the debug signing configuration and is for build verification only; it is not ready to publish. The workflow does not upload to the Play Store.
 
-### 4. When should premature optimization be avoided?
+## Supporting references
 
-Premature optimization should be avoided when there is no measurable performance problem. Developers should first profile the application, identify actual bottlenecks, and prioritize optimizations that address those bottlenecks instead of adding unnecessary complexity.
+- [GitHub Actions documentation](https://docs.github.com/actions)
+- [Flutter continuous delivery](https://docs.flutter.dev/deployment/cd)
+- [Build and release an Android app](https://docs.flutter.dev/deployment/android)
+- [Using secrets in GitHub Actions](https://docs.github.com/actions/security-guides/using-secrets-in-github-actions)
+- [Semantic Versioning](https://semver.org/)

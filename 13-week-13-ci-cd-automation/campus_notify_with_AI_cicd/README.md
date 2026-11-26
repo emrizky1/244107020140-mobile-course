@@ -6,7 +6,6 @@ Campus Notify is a Flutter application for viewing campus announcements, saving 
 
 The GitHub Actions workflow at `.github/workflows/flutter-ci.yml` runs on pushes and pull requests targeting `main`, and can also be started manually. It checks out the repository, installs Java 17 and stable Flutter, fetches dependencies, checks Dart formatting, runs static analysis and tests, and then builds Android release APK and app bundle files. Successful builds are uploaded as the `android-builds` artifact for seven days.
 
-The workflow only requests `contents: read`. It does not deploy to Google Play or expose signing secrets. Pull requests from forks do not receive repository secrets.
 
 ## Versioning
 
@@ -21,9 +20,6 @@ Local verification for the CI and artifact workflow changes:
 - `flutter test --coverage`: passed, all 33 tests passed.
 - `flutter build apk --release`: passed; produced `build/app/outputs/flutter-apk/app-release.apk`.
 - `flutter build appbundle --release`: passed; produced `build/app/outputs/bundle/release/app-release.aab`.
-- Workflow changes are in commits `158a94b` (checks), `225b3d8` (Android artifacts), and `02e4869` (Flutter action configuration).
-
-These are local results. A GitHub Actions run and its downloadable artifact have not yet been observed because the commits have not been pushed.
 
 ## Reflection
 
@@ -38,11 +34,3 @@ The failed workflow step and its complete log, the commit SHA and branch, the Fl
 ### What still needs approval or manual review before a release?
 
 Review the source changes and version, verify app configuration and permissions, test the signed build on supported devices, and obtain the release approval required by the project. Production signing material must be kept in restricted GitHub Actions secrets and only exposed to a protected release workflow. The current Android release build uses the debug signing configuration and is for build verification only; it is not ready to publish. The workflow does not upload to the Play Store.
-
-## Supporting references
-
-- [GitHub Actions documentation](https://docs.github.com/actions)
-- [Flutter continuous delivery](https://docs.flutter.dev/deployment/cd)
-- [Build and release an Android app](https://docs.flutter.dev/deployment/android)
-- [Using secrets in GitHub Actions](https://docs.github.com/actions/security-guides/using-secrets-in-github-actions)
-- [Semantic Versioning](https://semver.org/)
